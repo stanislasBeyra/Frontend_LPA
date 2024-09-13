@@ -21,5 +21,5 @@ module.exports = {
 
 
   //  pour les url de des image
-  urlImage: 'http://192.168.1.3:1207/storage/',
+  urlImage: 'http://192.168.1.7:1207/storage/',
 };
