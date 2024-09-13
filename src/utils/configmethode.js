@@ -20,3 +20,14 @@ export const getResource = async (url) => {
     throw error;
   }
 };
+
+
+export const deleteResource = async (url) => {
+  try {
+    const response = await axiosInstance.delete(url);
+    return response;
+  } catch (error) {
+    console.error('Erreur lors de la requête DELETE:', error);
+    throw error;
+  }
+};
