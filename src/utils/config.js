@@ -22,4 +22,5 @@ module.exports = {
 
   //  pour les url de des image
   urlImage: 'http://192.168.1.7:1207/storage/',
+  baseUrl:'http://192.168.1.7:1207'
 };

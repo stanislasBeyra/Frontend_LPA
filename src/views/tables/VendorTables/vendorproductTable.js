@@ -150,11 +150,15 @@ const VendorProductTables = () => {
 
   const handleDelete = async () => {
     try {
-      await VendorController.deleteProduct(selectedProduct.id);
+     const response= await VendorController.deleteProduct(selectedProduct.id);
+     if(response.status===200){
       setRows(rows.filter((row) => row.id !== selectedProduct.id));
       handleCloseDeleteDialog();
+      toast.success('Product Delete successfully!');
+     }
+
     } catch (error) {
-      console.error('Failed to delete product:', error);
+      console.error('Failed to delete productssss:', error);
     }
   };
 
