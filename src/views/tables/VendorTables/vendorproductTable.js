@@ -168,9 +168,6 @@ const VendorProductTables = () => {
       stock,
       price,
       categorie_id: categorieId,
-      product_images1: productImages[0] || null, // Première image
-      product_images2: productImages[1] || null, // Deuxième image
-      product_images3: productImages[2] || null, // Troisième image
     };
     console.log('voila les data recuperer: ',productData)
     try {
@@ -350,6 +347,14 @@ const VendorProductTables = () => {
                     defaultValue={selectedProduct.stock}
                   />
                 </Grid>
+                <Grid item xs={12} sm={6}>
+                  <CustomSelect
+                    value={categorieId}
+                    onChange={(e) => setCategorieId(e.target.value)}
+                    label="Category"
+                    options={categories}
+                  />
+                </Grid>
                 <Grid item xs={12} md={6}>
                   <CustomTextField
                     margin="dense"
@@ -362,15 +367,8 @@ const VendorProductTables = () => {
                     defaultValue={selectedProduct.product_description}
                   />
                 </Grid>
-                <Grid item xs={12} sm={6}>
-                  <CustomSelect
-                    value={categorieId}
-                    onChange={(e) => setCategorieId(e.target.value)}
-                    label="Category"
-                    options={categories}
-                  />
-                </Grid>
-                <Grid item xs={12}>
+
+                {/* <Grid item xs={12}>
                   <input
                     accept="image/*"
                     multiple
@@ -384,7 +382,7 @@ const VendorProductTables = () => {
                       Upload Images
                     </MyButton>
                   </label>
-                </Grid>
+                </Grid> */}
                 <Grid item xs={12}>
                   {/* Affichage des images téléchargées */}
                   <div style={{ display: 'flex', flexWrap: 'wrap', marginTop: '10px' }}>
@@ -401,8 +399,8 @@ const VendorProductTables = () => {
                 </Grid>
               </Grid>
               <DialogActions>
-                <Button sx={{ color: blueColor }} onClick={handleCloseEditDialog} color="primary">Cancel</Button>
-                <Button sx={{ color: teelColor }} type="submit">Save</Button>
+                <Button sx={{ color: grayColor }} onClick={handleCloseEditDialog} color="primary">Cancel</Button>
+                <MyButton sx={{ color: whiteColor }} type="submit">Save</MyButton>
               </DialogActions>
             </form>
           )}
