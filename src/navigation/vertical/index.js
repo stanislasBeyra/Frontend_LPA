@@ -37,6 +37,11 @@ const useNavigation = () => {
           sectionTitle: 'Admin Interface'
         },
         {
+          title: 'Add Vendor & Employee',
+          icon: AccountCogOutline,
+          path: '/addemployepage'
+        },
+        {
           title: 'User Vendor',
           icon: AccountCogOutline,
           path: '/account-settingss'
@@ -44,7 +49,7 @@ const useNavigation = () => {
         {
           title: 'User Client',
           icon: AccountCogOutline,
-          path: '/account-settingssss'
+          path: '/user_employe'
         },
 
           {
@@ -93,12 +98,12 @@ const useNavigation = () => {
             sectionTitle: 'Vendor Interface'
           },
           {
-            title: 'My product',
+            title: 'My products',
             icon: FormatLetterCase,
             path: '/VendorViews/vendorProducts'
           },
           {
-            title: 'My order',
+            title: 'My orders',
             icon: FormatLetterCase,
             path: '/tables'
           },
