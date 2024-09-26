@@ -52,7 +52,6 @@ const EmployeeListData = () => {
     const fetchAllEmployee = async () => {
       try {
         const data = await EmployeController.getAllEmployee();
-        console.log(data.data)
         setEmployees(data.data.employees);
       } catch (error) {
         console.error('Failed to fetch employees:', error);

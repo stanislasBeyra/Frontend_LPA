@@ -7,6 +7,7 @@ import { styled } from '@mui/material/styles';
 import CustomTextField from 'src/utils/CustomTextField';
 import CustomSelect from 'src/utils/CustomSelect';
 import MyButton from 'src/utils/CustomButton';
+import CircularProgress from '@mui/material/CircularProgress';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import { Paper } from '@mui/material';
@@ -22,6 +23,7 @@ const AddEmployeeForm = () => {
   const [success, setSuccess] = useState('');
   const [showError, setShowError] = useState(false);
   const [showSuccess, setShowSuccess] = useState(false);
+  const [loading, setLoading] = useState(false); // État de chargement
   const [roleId, setRoleId] = useState('');
   const [roleregister, setRoleregister] = useState(''); // Ajouter cet état
   const [RolesDatas, setRolesDatas] = useState([]);
@@ -43,7 +45,7 @@ const AddEmployeeForm = () => {
         setError("Impossible de récupérer les rôles");
         setShowError(true);
         toast.error("Impossible de récupérer les rôles");
-        setTimeout(() => setShowError(false), 3000); // Masquer après 1 seconde
+        setTimeout(() => setShowError(false), 3000);
       }
     };
     fetchRoles();
@@ -56,7 +58,7 @@ const AddEmployeeForm = () => {
       setError("Tous les champs sont requis.");
       setShowError(true);
       toast.error("Tous les champs sont requis.");
-      setTimeout(() => setShowError(false), 3000); // Masquer après 1 seconde
+      setTimeout(() => setShowError(false), 3000);
       return;
     }
 
@@ -68,38 +70,40 @@ const AddEmployeeForm = () => {
       mobile,
       salary,
       role: roleId,
-      roleregister:roleregister,
+      roleregister: roleregister,
     };
 
     console.log('Données à soumettre:', data);
 
+    setLoading(true); // Début du chargement
+
     try {
       const response = await LoginController.submitRegister(data);
-      console.log(response);
+      setLoading(false); // Fin du chargement
+
       if (response.status === 201) {
-        setSuccess(response.data.message); // Afficher le message de succès venant du backend
+        setSuccess(response.data.message);
         setShowSuccess(true);
-        toast.success(response.data.message); // Afficher la notification
-        setTimeout(() => setShowSuccess(false), 3000); // Masquer après 1 seconde
+        toast.success(response.data.message);
+        setTimeout(() => setShowSuccess(false), 3000);
       } else if (response.status === 422) {
-        console.log(response.data.error); // Vérifier si c'est une erreur de validation
-        setError(response.data.error); // Afficher les erreurs dans l'interface
+        setError(response.data.error);
         setShowError(true);
-        toast.error(response.data.error[0]); // Afficher une erreur toast
-        setTimeout(() => setShowError(false), 3000); // Masquer après 1 seconde
+        toast.error(response.data.error[0]);
+        setTimeout(() => setShowError(false), 3000);
       } else {
         setError(response.data.message || "Erreur lors de l'ajout de l'utilisateur");
         setShowError(true);
         toast.error(response.data.message || "Erreur lors de l'ajout de l'utilisateur");
-        setTimeout(() => setShowError(false), 3000); // Masquer après 1 seconde
+        setTimeout(() => setShowError(false), 3000);
       }
     } catch (error) {
+      setLoading(false); // Fin du chargement en cas d'erreur
       const errorMessage = error.response?.data?.message || "Une erreur est survenue lors de l'ajout de l'utilisateur";
       setError(errorMessage);
       setShowError(true);
       toast.error(errorMessage);
-      setTimeout(() => setShowError(false), 3000); // Masquer après 1 seconde
-      console.error(error);
+      setTimeout(() => setShowError(false), 3000);
     }
   };
 
@@ -186,15 +190,15 @@ const AddEmployeeForm = () => {
             <Grid item xs={12} sm={6}>
               <CustomSelect
                 value={roleId}
-                onChange={handleRoleChange} // Utiliser la fonction modifiée
+                onChange={handleRoleChange}
                 label="Rôle"
                 options={RolesData}
                 required
               />
             </Grid>
             <Grid item xs={12}>
-              <ButtonStyled type="submit" variant="contained" sx={{ background: teelColor }}>
-                Ajouter un employé
+              <ButtonStyled type="submit" variant="contained" sx={{ background: teelColor }} disabled={loading}>
+                {loading ? <CircularProgress sx={{ color:teelColor }} size={24} /> : 'Ajouter un employé'}
               </ButtonStyled>
             </Grid>
           </Grid>
@@ -219,6 +223,9 @@ const AddEmployeeForm = () => {
 export default AddEmployeeForm;
 
 
+
+
+
 // import React, { useState, useEffect } from 'react';
 // import Box from '@mui/material/Box';
 // import Grid from '@mui/material/Grid';
@@ -231,7 +238,6 @@ export default AddEmployeeForm;
 // import { ToastContainer, toast } from 'react-toastify';
 // import 'react-toastify/dist/ReactToastify.css';
 // import { Paper } from '@mui/material';
-
 // import { teelColor } from 'src/utils/config';
 // import LoginController from 'src/controllers/LoginController';
 
@@ -242,6 +248,8 @@ export default AddEmployeeForm;
 // const AddEmployeeForm = () => {
 //   const [error, setError] = useState('');
 //   const [success, setSuccess] = useState('');
+//   const [showError, setShowError] = useState(false);
+//   const [showSuccess, setShowSuccess] = useState(false);
 //   const [roleId, setRoleId] = useState('');
 //   const [roleregister, setRoleregister] = useState(''); // Ajouter cet état
 //   const [RolesDatas, setRolesDatas] = useState([]);
@@ -261,7 +269,9 @@ export default AddEmployeeForm;
 //       } catch (error) {
 //         console.error(error);
 //         setError("Impossible de récupérer les rôles");
+//         setShowError(true);
 //         toast.error("Impossible de récupérer les rôles");
+//         setTimeout(() => setShowError(false), 3000); // Masquer après 1 seconde
 //       }
 //     };
 //     fetchRoles();
@@ -270,10 +280,11 @@ export default AddEmployeeForm;
 //   const handleEmployeeRegister = async (e) => {
 //     e.preventDefault();
 
-//     // Assurez-vous que toutes les valeurs sont définies
 //     if (!firstname || !lastname || !username || !email || !mobile || !salary || !roleId) {
 //       setError("Tous les champs sont requis.");
+//       setShowError(true);
 //       toast.error("Tous les champs sont requis.");
+//       setTimeout(() => setShowError(false), 3000); // Masquer après 1 seconde
 //       return;
 //     }
 
@@ -295,19 +306,27 @@ export default AddEmployeeForm;
 //       console.log(response);
 //       if (response.status === 201) {
 //         setSuccess(response.data.message); // Afficher le message de succès venant du backend
+//         setShowSuccess(true);
 //         toast.success(response.data.message); // Afficher la notification
+//         setTimeout(() => setShowSuccess(false), 3000); // Masquer après 1 seconde
 //       } else if (response.status === 422) {
 //         console.log(response.data.error); // Vérifier si c'est une erreur de validation
 //         setError(response.data.error); // Afficher les erreurs dans l'interface
+//         setShowError(true);
 //         toast.error(response.data.error[0]); // Afficher une erreur toast
+//         setTimeout(() => setShowError(false), 3000); // Masquer après 1 seconde
 //       } else {
 //         setError(response.data.message || "Erreur lors de l'ajout de l'utilisateur");
+//         setShowError(true);
 //         toast.error(response.data.message || "Erreur lors de l'ajout de l'utilisateur");
+//         setTimeout(() => setShowError(false), 3000); // Masquer après 1 seconde
 //       }
 //     } catch (error) {
 //       const errorMessage = error.response?.data?.message || "Une erreur est survenue lors de l'ajout de l'utilisateur";
 //       setError(errorMessage);
+//       setShowError(true);
 //       toast.error(errorMessage);
+//       setTimeout(() => setShowError(false), 3000); // Masquer après 1 seconde
 //       console.error(error);
 //     }
 //   };
@@ -317,7 +336,6 @@ export default AddEmployeeForm;
 //     label: role.role_name,
 //   }));
 
-//   // Mettre à jour roleregister lorsque le rôle change
 //   const handleRoleChange = (e) => {
 //     setRoleId(e.target.value);
 //     const selectedRole = RolesDatas.find(role => role.id === e.target.value);
@@ -327,13 +345,13 @@ export default AddEmployeeForm;
 //   };
 
 //   return (
-//     <Paper sx={{ width: '100%', overflow: 'hidden', height: 1650 }}>
+//     <Paper sx={{ width: '100%', overflow: 'hidden', }}>
 //       <Typography variant="h4" sx={{ marginBottom: 3, margin: 5, color: teelColor }}>
 //         Ajouter des employés
 //       </Typography>
 
-//       {error && <Alert severity="error">{error}</Alert>}
-//       {success && <Alert severity="success">{success}</Alert>}
+//       {showError && <Alert severity="error">{error}</Alert>}
+//       {showSuccess && <Alert severity="success">{success}</Alert>}
 
 //       <Grid sx={{ margin: 10 }}>
 //         <form onSubmit={handleEmployeeRegister}>

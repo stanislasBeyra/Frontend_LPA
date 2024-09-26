@@ -44,7 +44,7 @@ const useNavigation = () => {
         {
           title: 'User Vendor',
           icon: AccountCogOutline,
-          path: '/account-settingss'
+          path: '/user_Vendor'
         },
         {
           title: 'User Client',
