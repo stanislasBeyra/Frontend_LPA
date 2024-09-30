@@ -15,6 +15,7 @@ export const UserProvider = ({ children }) => {
         // Récupérer les données utilisateur une seule fois au chargement de l'application
         const profile = await LoginController.getProfile();
         const user = new UserModel(profile.data.user);
+        console.log(user);
         setUserInfo(user); // Stocker les informations utilisateur dans le state
       } catch (error) {
         console.error('Failed to fetch user profile:', error);

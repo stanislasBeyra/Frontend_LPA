@@ -5,7 +5,7 @@ import { useRouter } from 'next/router';
 
 // ** Demo Components Imports
 import MyButton from 'src/utils/CustomButton';
-import EmployeeListData from 'src/views/tables/EmployeTable/employeListe';
+import VendorsListData from 'src/views/tables/VendorListeTable/VendorListe';
 import { teelColor } from 'src/utils/config';
 
 
@@ -33,7 +33,7 @@ const UserVendor = () => {
         </Grid>
       </Grid>
       <Grid item xs={12}>
-        <EmployeeListData />
+        <VendorsListData />
       </Grid>
     </Grid>
   );

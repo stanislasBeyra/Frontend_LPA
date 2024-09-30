@@ -1,4 +1,3 @@
-// models/UserModel.js
 import { urlImage } from 'src/utils/config';
 
 class UserModel {
@@ -23,7 +22,7 @@ class UserModel {
     this.lastname = lastname;
     this.email = email;
     this.mobile = mobile;
-    this.role = role;
+    this.role = Number(role);  // Conversion de role en nombre
     this.status = status;
     this.avatar = avatar;
     this.net_salary = net_salary;
@@ -40,9 +39,9 @@ class UserModel {
       case 1:
         return 'admin';
       case 2:
-        return 'vendor';
-      case 3:
         return 'client';
+      case 3:
+        return 'vendor';
       default:
         return '';
     }
@@ -59,3 +58,5 @@ class UserModel {
 }
 
 export default UserModel;
+
+
