@@ -1,0 +1,16 @@
+{
+    "success": true,
+    "passwor": "5DwtVaPuAVbt",
+    "message": "Vendor created successfully",
+    "user": {
+        "firstname": "devops",
+        "lastname": "devops",
+        "username": "devops",
+        "email": "devops@gmail.com",
+        "mobile": "098765439",
+        "role": 1,
+        "updated_at": "2024-09-30T01:41:35.000000Z",
+        "created_at": "2024-09-30T01:41:35.000000Z",
+        "id": 12
+    }
+}
