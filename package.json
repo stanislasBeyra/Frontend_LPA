@@ -37,12 +37,15 @@
   ],
   "scripts": {
     "local": "next dev --hostname 192.168.1.12 --port 1206",
-    "dev": "next dev",
-    "build": "next build",
-    "start": "next start",
+    "devs": "next dev",
+    "builds": "next build",
+    "starts": "next start",
     "export": "next export",
     "lint": "eslint --fix \"src/**/*.{js,jsx}\"",
-    "format": "prettier --write \"src/**/*.{js,jsx}\""
+    "format": "prettier --write \"src/**/*.{js,jsx}\"",
+    "dev": "node server.js",
+    "build": "next build",
+    "start": "NODE_ENV=production node server.js"
   },
   "dependencies": {
     "@emotion/cache": "^11.6.0",
