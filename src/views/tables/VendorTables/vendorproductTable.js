@@ -61,7 +61,7 @@ const VendorProductTables = () => {
   const [imageFiles, setImageFiles] = useState([]);
 
   const handleChangePage = (event, newPage) => {
-    setPage(newPage); 
+    setPage(newPage);
   };
 
   const handleChangeRowsPerPage = (event) => {
@@ -254,7 +254,7 @@ const VendorProductTables = () => {
 
                 <TableCell align="center">
                   <img
-                    src={`${urlImage}/${row.product_images1}`}
+                    src={`${urlImage}${row.product_images1}`}
                     alt="Product"
                     style={{
                       width: '50px',

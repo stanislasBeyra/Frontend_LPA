@@ -136,7 +136,7 @@ const LoginPage = () => {
         // }else if(error.response.status===500){
         //   router.push('/500')
         // }
-        setError({ email: '', password: 'Invalid credentials' })
+        setError({ email: '', password: 'Invalid credentials' }) 
       }
     }
   }

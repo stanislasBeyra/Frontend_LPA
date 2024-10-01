@@ -48,3 +48,22 @@
       "id": 14
   }
 }
+client 
+{
+    "success": true,
+    "passwor": "T3XoM9mXNizN",
+    "message": "Employee created successfully",
+    "employee": {
+        "firstname": "client",
+        "lastname": "beyra",
+        "username": "beyradev",
+        "email": "stanishbeyra@gmail.com",
+        "mobile": "0987654676",
+        "net_salary": 0,
+        "password": "$2y$12$8/6i7kaCCEqih7QBffmowOJcTRjOWXtaK2M07we6Hp8BJUn5ly.lW",
+        "role": 2,
+        "updated_at": "2024-09-30T20:54:48.000000Z",
+        "created_at": "2024-09-30T20:54:48.000000Z",
+        "id": 1
+    }
+}

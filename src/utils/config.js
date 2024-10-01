@@ -21,6 +21,6 @@ module.exports = {
 
 
   //  pour les url de des image
-  urlImage: 'https://projectpcc.softsolutionsdev.com/storage/',
+  urlImage: 'https://projectpcc.softsolutionsdev.com/app/public/',
   baseUrl:'https://projectpcc.softsolutionsdev.com'
 };
