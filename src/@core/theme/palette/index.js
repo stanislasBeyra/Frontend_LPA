@@ -1,7 +1,7 @@
 const DefaultPalette = (mode, themeColor) => {
   // ** Vars
-  const lightColor = '58, 53, 65'
-  const darkColor = '231, 227, 252'
+  const lightColor = '#3A353D'; // Couleur hexadécimale valide
+  const darkColor = '#E7E3FC';   // Couleur hexadécimale valide
   const mainColor = mode === 'light' ? lightColor : darkColor
 
   const primaryGradient = () => {
