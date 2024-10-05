@@ -1,20 +1,17 @@
 // ** MUI Imports
-import Grid from '@mui/material/Grid';
 import Typography from '@mui/material/Typography';
 import { useRouter } from 'next/router';
+import { Box } from 'mdi-material-ui';
+import Grid from '@mui/material/Grid';
 
 // ** Demo Components Imports
-import MyButton from 'src/utils/CustomButton';
-import VendorsListData from 'src/views/tables/VendorListeTable/VendorListe';
 import { teelColor } from 'src/utils/config';
+import VendorOrdersDataListe from 'src/views/tables/VendorListeTable/vendorsorderTable';
 
 
-const UserVendor = () => {
+const VendorOrders = () => {
   const router = useRouter();
 
-  const addPage = () => {
-    router.push('/addemployepage');
-  };
 
   return (
     <Grid container spacing={6}>
@@ -22,17 +19,16 @@ const UserVendor = () => {
         <Grid container alignItems="center" spacing={10}>
           <Grid item>
             <Typography variant="h5" sx={{ color: teelColor }}>
-              Vendor Liste
+              My Orders Liste
             </Typography>
           </Grid>
-          
         </Grid>
       </Grid>
       <Grid item xs={12}>
-        <VendorsListData />
+        <VendorOrdersDataListe />
       </Grid>
     </Grid>
   );
 };
 
-export default UserVendor;
+export default VendorOrders;

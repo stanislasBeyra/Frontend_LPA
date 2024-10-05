@@ -105,7 +105,7 @@ const useNavigation = () => {
           {
             title: 'My orders',
             icon: FormatLetterCase,
-            path: '/tables'
+            path: '/VendorViews/vendorsOrders'
           },
         ]
       : []),

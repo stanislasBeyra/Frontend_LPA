@@ -6,6 +6,7 @@ const VendorController = {
   updateProduct: (productId, data) => postResource(`api/update/vendor/products/${productId}`, data),
   deleteProduct:(productId,)=>deleteResource(`api/destroy/Product/${productId}`),
   getAllVendor: (token) => getResource('api/get/VendorList', token),
+  getTheVendororders:(token)=>getResource('api/get/VendorOrders')
 
 };
 
