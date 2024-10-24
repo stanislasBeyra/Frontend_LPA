@@ -1,4 +1,4 @@
-import { urlImage } from 'src/utils/config';
+import { urlImage,urlAvatar } from 'src/utils/config';
 
 class UserModel {
   constructor({
@@ -49,7 +49,7 @@ class UserModel {
 
   // Méthode pour obtenir l'URL de l'avatar de l'utilisateur
   getUserAvatar() {
-    return this.avatar ? `${urlImage}${this.avatar}` : '/images/avatars/1.png';
+    return this.avatar ? `${urlAvatar}${this.avatar}` : '/images/avatars/1.png';
   }
 
   getFullName() {
