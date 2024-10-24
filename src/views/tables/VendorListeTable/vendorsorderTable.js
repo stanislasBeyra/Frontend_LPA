@@ -77,13 +77,13 @@ const VendorOrdersDataListe = () => {
     try {
 
 
-      const dataid={
-        orderId:orderId
+      const dataid = {
+        orderId: orderId
       }
       console.log('ID de la commande à valider :', dataid);
       const response = await VendorController.validetedorder(dataid);
       console.log('Réponse de la validation :', response);
-      
+
       handleClose()
 
       // Logique de validation réussie à ajouter ici, ex : mettre à jour les commandes après validation
@@ -119,7 +119,10 @@ const VendorOrdersDataListe = () => {
                     key={order.order_id}
                     sx={{ '&:last-of-type td, &:last-of-type th': { border: 0 } }}
                   >
-                    <TableCell align="center">{new Date(order.created_at).toLocaleDateString()}</TableCell>
+                    <TableCell align="center">
+                      {new Date(order.created_at).toLocaleDateString()} {new Date(order.created_at).toLocaleTimeString()}
+                    </TableCell>
+
                     <TableCell align="center">{order.username}</TableCell>
                     <TableCell align="center">{order.useremail}</TableCell>
                     <TableCell align="center">{order.total_price} FCFA</TableCell>
@@ -214,21 +217,21 @@ const VendorOrdersDataListe = () => {
                             </Grid>
                           ))}
                         {selectedOrder.products.length > 3 && (
-                  <Grid item xs={12} sx={{ display: 'flex', justifyContent: 'space-between' }}>
-                    <Button
-                      onClick={handleProductPreviousPage}
-                      disabled={productPage === 0}
-                    >
-                      Précédent
-                    </Button>
-                    <Button
-                      onClick={handleProductNextPage}
-                      disabled={productPage >= Math.ceil(selectedOrder.products.length / productsPerPage) - 1}
-                    >
-                      Suivant
-                    </Button>
-                  </Grid>
-                )}
+                          <Grid item xs={12} sx={{ display: 'flex', justifyContent: 'space-between' }}>
+                            <Button
+                              onClick={handleProductPreviousPage}
+                              disabled={productPage === 0}
+                            >
+                              Précédent
+                            </Button>
+                            <Button
+                              onClick={handleProductNextPage}
+                              disabled={productPage >= Math.ceil(selectedOrder.products.length / productsPerPage) - 1}
+                            >
+                              Suivant
+                            </Button>
+                          </Grid>
+                        )}
                       </>
                     ) : (
                       <Typography>Aucun produit dans cette commande.</Typography>
@@ -240,9 +243,9 @@ const VendorOrdersDataListe = () => {
           )}
         </DialogContent>
         <DialogActions>
-          <MyButton  bgColor={teelColor} color={whiteColor} onClick={() => validatedorder(selectedOrder.order_id)} >
-          Valider la commande
-            </MyButton>
+          <MyButton bgColor={teelColor} color={whiteColor} onClick={() => validatedorder(selectedOrder.order_id)} >
+            Valider la commande
+          </MyButton>
 
           <Button onClick={handleClose} color="primary">
             Fermer
