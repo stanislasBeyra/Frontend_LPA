@@ -19,6 +19,7 @@ import Button from '@mui/material/Button';
 import TextField from '@mui/material/TextField';
 import Slide from '@mui/material/Slide';
 import Typography from '@mui/material/Typography';
+import CircularProgress from '@mui/material/CircularProgress';
 import Rating from '@mui/material/Rating';
 import { Grid } from '@mui/material';
 import { ToastContainer, toast } from 'react-toastify'
@@ -59,6 +60,12 @@ const VendorProductTables = () => {
   const [openDetailDialog, setOpenDetailDialog] = useState(false); // État pour le modal des détails
   const [selectedProduct, setSelectedProduct] = useState(null);
   const [imageFiles, setImageFiles] = useState([]);
+  const [error, setError] = useState('');
+  const [success, setSuccess] = useState('');
+  const [showError, setShowError] = useState(false);
+  const [showSuccess, setShowSuccess] = useState(false);
+  const [loading, setLoading] = useState(false);
+  const [categorieData,setCategorieData]=useState([])
 
   const handleChangePage = (event, newPage) => {
     setPage(newPage);
@@ -150,15 +157,18 @@ const VendorProductTables = () => {
 
   const handleDelete = async () => {
     try {
+      setLoading(true)
      const response= await VendorController.deleteProduct(selectedProduct.id);
      if(response.status===200){
       setRows(rows.filter((row) => row.id !== selectedProduct.id));
       handleCloseDeleteDialog();
       toast.success('Product Delete successfully!');
+      setLoading(false)
      }
 
     } catch (error) {
       console.error('Failed to delete productssss:', error);
+      setLoading(false)
     }
   };
 
@@ -175,6 +185,7 @@ const VendorProductTables = () => {
     };
     console.log('voila les data recuperer: ',productData)
     try {
+      setLoading(true)
       console.log('ID du produit:', selectedProduct.id);
 
       if (!selectedProduct.id) {
@@ -209,7 +220,7 @@ const VendorProductTables = () => {
       //   toast.error(errorMessage);
       // }
 
-
+      setLoading(false)
     } catch (error) {
       console.error('Failed to update product:', error);
       toast.error('An error occurred. Please try again.');
@@ -231,6 +242,30 @@ const VendorProductTables = () => {
     { value: 2, label: 'Category 2' },
     { value: 3, label: 'Category 3' }
   ];
+
+  useEffect(() => {
+    const fetchcategoriesdatas = async () => {
+      try {
+        const response = await VendorController.getproductcategory();
+        console.log('Rôles récupérés:', response.data.categories);
+        setCategorieData(response.data.categories);
+      } catch (error) {
+        console.error(error);
+        setError("Impossible de récupérer les rôles");
+        setShowError(true);
+        toast.error("Impossible de récupérer les rôles");
+        setTimeout(() => setShowError(false), 3000);
+      }
+    };
+    fetchcategoriesdatas();
+  }, []);
+
+  const CategoriesData = categorieData.map((category) => ({
+    value: category.id,
+    label: category.name,
+  }));
+
+
   return (
     <Paper sx={{ width: '100%', overflow: 'hidden' }}>
       <TableContainer sx={{ maxHeight: 500 }}>
@@ -240,7 +275,7 @@ const VendorProductTables = () => {
 
               <TableCell sx={{ color: whiteColor }} align="center"><strong>Product Image</strong></TableCell>
               <TableCell sx={{ color: whiteColor }} align="center"><strong>Product Name</strong></TableCell>
-              {/* <TableCell sx={{ color: whiteColor }} align="center"><strong>Description</strong></TableCell> */}
+               <TableCell sx={{ color: whiteColor }} align="center"><strong>categorie</strong></TableCell>
               <TableCell sx={{ color: whiteColor }} align="center"><strong>Price</strong></TableCell>
               <TableCell sx={{ color: whiteColor }} align="center"><strong>Stock</strong></TableCell>
               <TableCell sx={{ color: whiteColor, width: 200 }} align='center'><strong>Created At</strong></TableCell>
@@ -267,7 +302,7 @@ const VendorProductTables = () => {
                   />
                 </TableCell>
                 <TableCell align="center">{row.product_name}</TableCell>
-                {/* <TableCell align="center">{row.product_description}</TableCell> */}
+                <TableCell align="center">{row.categories_name}</TableCell>
                 <TableCell align="center">{row.price}</TableCell>
                 <TableCell align="center">{row.stock}</TableCell>
                 <TableCell align='center'>{formatDate(row.created_at)}</TableCell>
@@ -304,8 +339,8 @@ const VendorProductTables = () => {
           Are you sure you want to delete this item?
         </DialogContent>
         <DialogActions>
-          <MyButton sx={{ background: grayColor }} onClick={handleCloseDeleteDialog}>Annuler</MyButton>
-          <MyButton sx={{ background: redColor }} onClick={handleDelete} color="error">Supprimer</MyButton>
+          <MyButton sx={{ background: grayColor }} onClick={handleCloseDeleteDialog}>Cancel</MyButton>
+          <MyButton sx={{ background: redColor }} onClick={handleDelete} color="error">{loading ? <CircularProgress size={24} color="inherit" /> : 'Delete'}</MyButton>
         </DialogActions>
       </Dialog>
 
@@ -356,7 +391,7 @@ const VendorProductTables = () => {
                     value={categorieId}
                     onChange={(e) => setCategorieId(e.target.value)}
                     label="Category"
-                    options={categories}
+                    options={CategoriesData}
                   />
                 </Grid>
                 <Grid item xs={12} md={6}>
@@ -404,7 +439,7 @@ const VendorProductTables = () => {
               </Grid>
               <DialogActions>
                 <Button sx={{ color: grayColor }} onClick={handleCloseEditDialog} color="primary">Cancel</Button>
-                <MyButton sx={{ color: whiteColor }} type="submit">Save</MyButton>
+                <MyButton sx={{ color: whiteColor }} type="submit">{loading ? <CircularProgress size={24} color="inherit" /> : 'Update'}</MyButton>
               </DialogActions>
             </form>
           )}

@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState,useEffect } from 'react';
 import Box from '@mui/material/Box';
 import Grid from '@mui/material/Grid';
 import Typography from '@mui/material/Typography';
@@ -23,6 +23,7 @@ const ButtonStyled = styled(MyButton)(({ theme }) => ({
 }));
 
 const ProductAdd = () => {
+
   const [productName, setProductName] = useState('');
   const [productDescription, setProductDescription] = useState('');
   const [stock, setStock] = useState('');
@@ -32,7 +33,10 @@ const ProductAdd = () => {
   const [imagePreviews, setImagePreviews] = useState([]);
   const [error, setError] = useState('');
   const [success, setSuccess] = useState('');
+  const [showError, setShowError] = useState(false);
+  const [showSuccess, setShowSuccess] = useState(false);
   const [loading, setLoading] = useState(false);
+  const [categorieData,setCategorieData]=useState([])
 
   const defaultImages = [
     'https://via.placeholder.com/306x408.png?text=Default+Image+1',
@@ -49,7 +53,6 @@ const ProductAdd = () => {
     }
 
     setError('');
-    setLoading(true);
 
     const previews = files.map(file => URL.createObjectURL(file));
 
@@ -62,6 +65,7 @@ const ProductAdd = () => {
       });
     });
 
+    setLoading(false);
     Promise.all(readers)
       .then(encodedImages => {
         setProductImages(encodedImages);
@@ -73,6 +77,7 @@ const ProductAdd = () => {
         setLoading(false);
       });
   };
+
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -96,6 +101,7 @@ const ProductAdd = () => {
 
     console.log('Sending product data: ', productData);
     try {
+      setLoading(true);
       const response = await VendorController.addProduct(productData);
 
       // Check the response status
@@ -123,6 +129,7 @@ const ProductAdd = () => {
         //setError(dataresponse.success ? result.errors : result.message);
         setSuccess('');
       }
+      setLoading(false);
     } catch (err) {
       const errorMessage =dataresponse.success ? result.errors : result.message
 
@@ -130,15 +137,34 @@ const ProductAdd = () => {
       console.error('Unexpected Error:', err); // Log unexpected error
       //setError('An unexpected error occurred. Please try again later.');
       toast.error('An unexpected error occurred. Please try again later.')
+      setLoading(false);
     }
   };
 
+useEffect(() => {
+    const fetchcategoriesdatas = async () => {
+      try {
+        const response = await VendorController.getproductcategory();
+        console.log('Rôles récupérés:', response.data.categories);
+        setCategorieData(response.data.categories);
+      } catch (error) {
+        console.error(error);
+        setError("Impossible de récupérer les rôles");
+        setShowError(true);
+        toast.error("Impossible de récupérer les rôles");
+        setTimeout(() => setShowError(false), 3000);
+      }
+    };
+    fetchcategoriesdatas();
+  }, []);
 
-  const categories = [
-    { value: 1, label: 'Category 1' },
-    { value: 2, label: 'Category 2' },
-    { value: 3, label: 'Category 3' }
-  ];
+  
+
+  const CategoriesData = categorieData.map((category) => ({
+    value: category.id,
+    label: category.name,
+  }));
+
 
   return (
     <Box>
@@ -195,7 +221,7 @@ const ProductAdd = () => {
               value={categorieId}
               onChange={(e) => setCategorieId(e.target.value)}
               label="Category"
-              options={categories}
+              options={CategoriesData}
             />
           </Grid>
 
@@ -213,11 +239,11 @@ const ProductAdd = () => {
             </CustonSelectImageButton>
           </Grid>
 
-          {loading && (
+          {/* {loading && (
             <Grid item xs={12} sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '100px' }}>
               <CircularProgress sx={{ color: teelColor }} />
             </Grid>
-          )}
+          )} */}
 
           <Grid item xs={12}>
             {!loading && (
@@ -246,7 +272,7 @@ const ProductAdd = () => {
 
           <Grid item xs={12}>
             <ButtonStyled type="submit" variant="contained" sx={{ background: teelColor }}>
-              Add Product
+            {loading ? <CircularProgress size={24} color="inherit" /> : 'Add Product'}
             </ButtonStyled>
            <ToastContainer
               position="top-center"

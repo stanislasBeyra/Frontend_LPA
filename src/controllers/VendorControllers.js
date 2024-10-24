@@ -7,7 +7,8 @@ const VendorController = {
   deleteProduct:(productId,)=>deleteResource(`api/destroy/Product/${productId}`),
   getAllVendor: (token) => getResource('api/get/VendorList', token),
   getTheVendororders:(token)=>getResource('api/get/VendorOrders',token),
-  validetedorder:(data)=>postResource('api/Vendor/validateOrder',data)
+  validetedorder:(data)=>postResource('api/Vendor/validateOrder',data),
+  getproductcategory:(token)=>getResource('api/get/category/foradmin',token)
 
 };
 
