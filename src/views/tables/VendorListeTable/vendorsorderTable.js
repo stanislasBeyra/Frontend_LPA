@@ -105,6 +105,7 @@ const VendorOrdersDataListe = () => {
                 <TableCell sx={{ color: whiteColor }} align="center">Nom d'utilisateur</TableCell>
                 <TableCell sx={{ color: whiteColor }} align="center">Email</TableCell>
                 <TableCell sx={{ color: whiteColor }} align="center">Total</TableCell>
+                <TableCell sx={{ color: whiteColor }} align="center">status</TableCell>
                 <TableCell sx={{ color: whiteColor }} align="center"><strong>Action</strong></TableCell>
               </TableRow>
             </TableHead>
@@ -125,6 +126,10 @@ const VendorOrdersDataListe = () => {
 
                     <TableCell align="center">{order.username}</TableCell>
                     <TableCell align="center">{order.useremail}</TableCell>
+                    {/* <TableCell align="center">{order.status}</TableCell> */}
+                    <TableCell align="center">
+          {order.products.length > 0 ? order.products[0].status : 'Statut indisponible'}
+        </TableCell>
                     <TableCell align="center">{order.total_price} FCFA</TableCell>
                     <TableCell align="center">
                       <IconButton sx={{ color: teelColor }} aria-label="info" onClick={() => handleOpen(order)}>
