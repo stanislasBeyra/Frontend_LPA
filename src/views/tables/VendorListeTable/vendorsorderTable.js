@@ -15,6 +15,10 @@ import DialogContent from '@mui/material/DialogContent';
 import DialogActions from '@mui/material/DialogActions';
 import Button from '@mui/material/Button';
 import Grid from '@mui/material/Grid';
+import Alert from '@mui/material/Alert';
+import CircularProgress from '@mui/material/CircularProgress';
+
+
 import { Card, CardMedia, CardContent, Typography } from '@mui/material';
 import MyButton from 'src/utils/CustomButton';
 
@@ -30,6 +34,11 @@ const VendorOrdersDataListe = () => {
   const [productPage, setProductPage] = useState(0);
   const productsPerPage = 3; // Limite d'affichage des produits par page
   const [open, setOpen] = useState(false);
+  const [error, setError] = useState('');
+  const [success, setSuccess] = useState('');
+  const [showError, setShowError] = useState(false);
+  const [showSuccess, setShowSuccess] = useState(false);
+  const [loading, setLoading] = useState(false);
 
   const handleOpen = (order) => {
     setSelectedOrder(order);
@@ -76,6 +85,7 @@ const VendorOrdersDataListe = () => {
   const validatedorder = async (orderId) => {
     try {
 
+      setLoading(true)
 
       const dataid = {
         orderId: orderId
@@ -83,20 +93,52 @@ const VendorOrdersDataListe = () => {
       console.log('ID de la commande à valider :', dataid);
       const response = await VendorController.validetedorder(dataid);
       console.log('Réponse de la validation :', response);
-
+      console.log('dfcghj', response.data.message || 'validation effectuer')
+      const responsedata = response.data
+      setSuccess(responsedata.message || 'validation effectuer')
+      setSuccess(true)
+      setTimeout(() => setSuccess(false), 3000);
+      setLoading(false)
       handleClose()
 
       // Logique de validation réussie à ajouter ici, ex : mettre à jour les commandes après validation
     } catch (error) {
       console.error('Erreur lors de la validation de la commande :', error);
+      setError(error.response.data.message || "Impossible de récupérer les rôles");
+      setShowError(true);
+      setTimeout(() => setShowError(false), 3000);
     }
   };
 
   const paginatedRows = orders.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage);
 
+  const getStatusOrders = (status) => {
+    switch (status) {
+      case '1':
+        return 'Pending'; // En attente
+      case '2':
+        return 'Processing'; // En traitement
+      case '3':
+        return 'Validated'; // Validé
+      case '4':
+        return 'Delivered'; // Livré
+      case '5':
+        return 'Cancelled'; // Annulé
+      default:
+        return 'Unknown status'; // Statut inconnu
+    }
+  };
+
+  // Exemple d'utilisation dans un tableau
+  console.log(getStatusOrders(1));
+
+
   return (
     <>
       <Paper sx={{ width: '100%', overflow: 'hidden' }}>
+        {error && <Alert severity="error">{error}</Alert>}
+        {success && <Alert severity="success">{success}</Alert>}
+
         <TableContainer sx={{ maxHeight: 500 }}>
           <Table sx={{ minWidth: 550 }} aria-label="orders data table">
             <TableHead sx={{ background: teelColor, color: whiteColor }}>
@@ -116,6 +158,7 @@ const VendorOrdersDataListe = () => {
                 </TableRow>
               ) : (
                 paginatedRows.map((order) => (
+
                   <TableRow
                     key={order.order_id}
                     sx={{ '&:last-of-type td, &:last-of-type th': { border: 0 } }}
@@ -127,9 +170,14 @@ const VendorOrdersDataListe = () => {
                     <TableCell align="center">{order.username}</TableCell>
                     <TableCell align="center">{order.useremail}</TableCell>
                     {/* <TableCell align="center">{order.status}</TableCell> */}
+                    {/* <TableCell align="center">
+                      {order.products.length > 0 ?getStatusOrders(order.products[0].status)  : 'Statut indisponible'}
+                    </TableCell> */}
                     <TableCell align="center">
-          {order.products.length > 0 ? order.products[0].status : 'Statut indisponible'}
-        </TableCell>
+                      {order.products && order.products.length > 0
+                        ? getStatusOrders(order.products[0].status)
+                        : 'Statut indisponible'}
+                    </TableCell>
                     <TableCell align="center">{order.total_price} FCFA</TableCell>
                     <TableCell align="center">
                       <IconButton sx={{ color: teelColor }} aria-label="info" onClick={() => handleOpen(order)}>
@@ -249,7 +297,7 @@ const VendorOrdersDataListe = () => {
         </DialogContent>
         <DialogActions>
           <MyButton bgColor={teelColor} color={whiteColor} onClick={() => validatedorder(selectedOrder.order_id)} >
-            Valider la commande
+            {loading ? <CircularProgress size={24} color="inherit" /> : 'Valider la commande'}
           </MyButton>
 
           <Button onClick={handleClose} color="primary">
