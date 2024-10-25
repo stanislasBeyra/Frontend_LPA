@@ -78,10 +78,13 @@ const VendorOrdersDataListe = () => {
       setLoading(false);
       handleClose();
     } catch (error) {
+      setLoading(false);
+      handleClose();
       console.error('Erreur lors de la validation de la commande :', error);
       setError(error.response?.data?.message || "Impossible de récupérer les rôles");
       setShowError(true);
       setTimeout(() => setShowError(false), 3000);
+
     }
   };
 
